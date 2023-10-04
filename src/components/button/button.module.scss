@@ -1,0 +1,43 @@
+@import "../../styles/colors";
+
+.base {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  color: $white;
+  font-weight: 500;
+  transition: background-color 0.25s ease;
+
+  &:focus {
+    outline: 4px solid fade-out($secondary, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+@mixin insert-color($color) {
+  background-color: $color;
+
+  &:hover {
+    background-color: darken($color, 5%);
+  }
+
+  &:focus {
+    outline: 2px solid fade-out($color, 0.75);
+    outline-offset: 2px;
+  }
+}
+
+.primary {
+  @include insert-color($primary);
+}
+
+.secondary {
+  @include insert-color($secondary);
+}
+
+.error {
+  @include insert-color($error);
+}
