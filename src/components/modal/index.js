@@ -1,0 +1,22 @@
+import React from "react";
+import s from "./modal.module.scss";
+
+const Modal = ({ isOpen, onClose, children, maxWidth }) => {
+  return (
+    <div>
+      <dialog open={isOpen} className={s.modal} onClick={onClose}>
+        <div className={s.modal_content} style={{ maxWidth }} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </div>
+      </dialog>
+    </div>
+  );
+};
+
+Modal.defaultProps = {
+  isOpen: false,
+  onClose: () => {},
+  maxWidth: 600,
+};
+
+export default Modal;
