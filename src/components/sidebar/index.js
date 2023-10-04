@@ -16,7 +16,7 @@ const Sidebar = () => {
     { title: "Dashboard", icon: DashboardIcon, href: "" },
     { title: "Payroll Activities", icon: ActivityIcon, href: "" },
     { title: "Salary Structures", icon: StructureIcon, href: "" },
-    { title: "Element Setup", icon: SettingsIcon, href: "" },
+    { title: "Element Setup", icon: SettingsIcon, children: [] },
     { title: "Employees", icon: AccountMultipleIcon, href: "" },
   ];
 
