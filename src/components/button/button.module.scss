@@ -5,7 +5,6 @@
   justify-content: center;
   align-items: center;
   gap: 0.875rem;
-  padding: 0.75rem 1rem;
   border-radius: 0.25rem;
   color: $white;
   font-weight: 500;
@@ -18,17 +17,33 @@
 }
 
 @mixin insert-color($color) {
-  background-color: $color;
+  &.filled {
+    background-color: $color;
 
-  &:hover {
-    background-color: darken($color, 5%);
+    &:hover {
+      background-color: darken($color, 5%);
+    }
   }
+
+  &.outlined {
+    border: 2px solid $color;
+    background-color: transparent;
+    color: $color;
+
+    &:hover {
+      background-color: fade-out($color, 0.95);
+    }
+  }
+
+ 
 
   &:focus {
     outline: 2px solid fade-out($color, 0.75);
     outline-offset: 2px;
   }
 }
+
+/* ==== COLORS ==== */
 
 .primary {
   @include insert-color($primary);
@@ -40,4 +55,22 @@
 
 .error {
   @include insert-color($error);
+}
+
+/* ==== SIZES ==== */
+
+.medium {
+  padding: 0.75rem 1.5rem;
+  height: 2.5rem;
+  font-size: 0.875rem;
+}
+
+.large {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  height: 3rem;
+}
+
+.fullwidth {
+  width: 100%;
 }
