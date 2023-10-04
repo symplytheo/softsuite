@@ -16,11 +16,11 @@ button {
 
 body {
   font-family: $body-font-family;
-  background: $grey;
+  background: $background;
   color: $black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.25;
 }
 
 h1,
