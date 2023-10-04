@@ -1,5 +1,5 @@
-@import "./fonts";
-@import "./colors";
+@import "fonts";
+@import "colors";
 
 * {
   box-sizing: border-box;
@@ -12,6 +12,8 @@
 
 button {
   cursor: pointer;
+  padding: 0;
+  background-color: transparent;
 }
 
 body {
@@ -45,6 +47,6 @@ code {
   }
 
   main {
-    padding: 0.5rem 3rem;
+    padding: 0.5rem 2.5rem 5rem;
   }
 }
