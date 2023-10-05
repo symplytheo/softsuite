@@ -161,3 +161,70 @@
     }
   }
 }
+
+.modal_title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $primary;
+  margin-bottom: 1.5rem;
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  .step {
+    animation: slide-in 0.1s ease-in-out forwards;
+  }
+
+  .stepper_content {
+    padding: 0.25rem 0.25rem;
+  }
+
+  .stepper_action {
+    display: flex;
+    gap: 1.5rem;
+  }
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  color: $primary;
+
+  .colspan_2 {
+    grid-column: span 2;
+  }
+
+  input,
+  textarea, select {
+    border: 1px solid $grey;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    width: 100%;
+
+    &:focus {
+      outline: 2px solid fade-out($secondary, 0.8);
+      outline-offset: 2px;
+    }
+  }
+
+  .label {
+    display: block;
+    color: fade-out($primary, 0.4);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

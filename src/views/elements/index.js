@@ -19,6 +19,7 @@ import {
 } from "@tanstack/react-table";
 import Chip from "../../components/chip";
 import { TABLEDATA } from "../../assets/utils";
+import CreateElementModal from "./create-element-modal";
 
 const COLUMNS = [
   { title: "Name", key: "name" },
@@ -218,7 +219,7 @@ const ElemetsPage = () => {
         </div>
       </section>
       {/*  */}
-      <NotificationModal
+      {/* <NotificationModal
         icon={DeleteIcon}
         title={"Are you sure you want to delete Element?"}
         subtitle={"You can't reverse this action"}
@@ -228,7 +229,8 @@ const ElemetsPage = () => {
         actionText={"Close to continue"}
         actionColor="error"
         showCancel
-      />
+      /> */}
+      <CreateElementModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
   );
 };
