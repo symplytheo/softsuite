@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Stepper from "../../../components/stepper";
 import Modal from "../../../components/modal";
-import s from '../elementlink.module.scss';
+import s from "../elementlink.module.scss";
 import AddLinkStepOne from "./linkstep1";
 import AddLinkStepTwo from "./linkstep2";
 import AddLinkStepThree from "./linkstep3";
 
-const CreateElementLinkModal = ({ isOpen, onClose }) => {
+const CreateElementLinkModal = ({ isOpen, onClose, onComplete }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -25,8 +25,22 @@ const CreateElementLinkModal = ({ isOpen, onClose }) => {
 
   const STEPS = [
     { label: "Staff Information", component: () => <AddLinkStepOne handleNext={handleNext} onClose={onClose} /> },
-    { label: "Additional Information", component: () => <AddLinkStepTwo handlePrev={handlePrev}  handleNext={handleNext} /> },
-    { label: "Processing Information", component: () => <AddLinkStepThree handlePrev={handlePrev} onClose={onClose} /> },
+    {
+      label: "Additional Information",
+      component: () => <AddLinkStepTwo handlePrev={handlePrev} handleNext={handleNext} />,
+    },
+    {
+      label: "Processing Information",
+      component: () => (
+        <AddLinkStepThree
+          handlePrev={handlePrev}
+          handleSubmit={() => {
+            onClose();
+            onComplete();
+          }}
+        />
+      ),
+    },
   ];
 
   return (

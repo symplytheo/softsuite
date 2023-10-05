@@ -5,7 +5,7 @@ import Button from "../../../components/button";
 import s from "../elementlink.module.scss";
 import Input from "../../../components/input";
 
-const AddLinkStepThree = ({ handlePrev, onClose }) => {
+const AddLinkStepThree = ({ handlePrev, handleSubmit }) => {
   return (
     <form className={s.form}>
         <div>
@@ -45,7 +45,7 @@ const AddLinkStepThree = ({ handlePrev, onClose }) => {
       <Button size="large" fullWidth mode="outlined" onClick={handlePrev}>
         Back
       </Button>
-      <Button size="large" fullWidth onClick={onClose}>
+      <Button size="large" fullWidth onClick={handleSubmit}>
         Create A New Element Link
       </Button>
     </form>
