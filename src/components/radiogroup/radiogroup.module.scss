@@ -3,6 +3,8 @@
 .group {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 
   .vertical {
     flex-direction: column;
@@ -11,7 +13,6 @@
   .label {
     display: flex;
     align-items: center;
-    margin-right: 1rem;
   }
 
   .button {
@@ -19,7 +20,7 @@
     height: 16px;
     border-radius: 50%;
     border: 2px solid $grey;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
 
   input[type="radio"] {
