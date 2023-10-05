@@ -1,0 +1,36 @@
+@import "../../styles/colors";
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown_toggler {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown_menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 0.5rem 0;
+  border: 1px solid $grey;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.dropdown_menu li {
+  list-style: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: fade-out($grey, 0.5);
+  }
+}
