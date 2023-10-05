@@ -1,13 +1,15 @@
 import React from "react";
 import s from "../elements.module.scss";
 import Button from "../../../components/button";
+import Input from "../../../components/input";
+import TextArea from "../../../components/textarea";
 
 const StepOne = ({ handleNext, onClose }) => {
   return (
     <form className={s.form}>
       <div>
         <label className={s.label} htmlFor="name">Name</label>
-        <input id="name" />
+        <Input id="name" />
       </div>
       <div>
         <label className={s.label} htmlFor="class">Element Classification</label>
@@ -23,11 +25,11 @@ const StepOne = ({ handleNext, onClose }) => {
       </div>
       <div className={s.colspan_2}>
         <label className={s.label} htmlFor="desc">Description</label>
-        <textarea id="desc" rows={3}></textarea>
+        <TextArea id="desc" rows={3} />
       </div>
       <div className={s.colspan_2}>
         <label className={s.label} htmlFor="report">Reporting Name</label>
-        <textarea id="report" rows={2}></textarea>
+        <TextArea id="report" />
       </div>
       <Button size="large" fullWidth mode="outlined" onClick={onClose}>
         Cancel

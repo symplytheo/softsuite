@@ -6,8 +6,9 @@ import { ReactComponent as FilterIcon } from "../../assets/icons/switch.svg";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/icons/delete.svg";
 import { ReactComponent as ActionIcon } from "../../assets/icons/more-square.svg";
+import { ReactComponent as CheckIcon } from "../../assets/icons/check.svg";
+import { ReactComponent as CheckRedIcon } from "../../assets/icons/check_red.svg";
 import Button from "../../components/button";
-import NotificationModal from "../../components/modal/notification";
 import {
   createColumnHelper,
   flexRender,
@@ -20,6 +21,7 @@ import {
 import Chip from "../../components/chip";
 import { TABLEDATA } from "../../assets/utils";
 import CreateElementModal from "./create-element-modal";
+import ConfirmationModal from "../../components/modal/confirmation";
 
 const COLUMNS = [
   { title: "Name", key: "name" },
@@ -31,32 +33,35 @@ const COLUMNS = [
   { title: "Action", key: "action" },
 ];
 
-const columnHelper = createColumnHelper();
-
-const columns = COLUMNS.map((col) =>
-  columnHelper.accessor(col.key, {
-    header: () => col.title,
-    cell: (info) =>
-      col.key === "status" ? (
-        <Chip color={info.getValue() === "Active" ? "secondary" : "error"}>{info.getValue()}</Chip>
-      ) : col.key === "action" ? (
-        <button onClick={() => alert("Clicked " + info.row.original.name)}>
-          <ActionIcon />
-        </button>
-      ) : (
-        info.getValue()
-      ),
-    enableSorting: col.key === "action" ? false : true,
-  })
-);
-
 const ElemetsPage = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const [data] = useState(() => [...TABLEDATA]);
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [search, setSearch] = useState(globalFilter ?? "");
+
+  const columnHelper = createColumnHelper();
+
+  const columns = COLUMNS.map((col) =>
+    columnHelper.accessor(col.key, {
+      header: () => col.title,
+      cell: (info) =>
+        col.key === "status" ? (
+          <Chip color={info.getValue() === "Active" ? "secondary" : "error"}>{info.getValue()}</Chip>
+        ) : col.key === "action" ? (
+          <button
+            onClick={() => {
+              setActiveElement(info.row.original);
+              setDeleteModal(true);
+            }}
+          >
+            <ActionIcon />
+          </button>
+        ) : (
+          info.getValue()
+        ),
+      enableSorting: col.key === "action" ? false : true,
+    })
+  );
 
   const table = useReactTable({
     data,
@@ -78,6 +83,14 @@ const ElemetsPage = () => {
   useEffect(() => {
     if (!search) setGlobalFilter("");
   }, [search]);
+
+  const [createModal, setCreateModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
+  const [deleteSuccessModal, setDeleteSuccessModal] = useState(false);
+  // const [updateSuccessModal, setUpdateSuccessModal] = useState(false);
+
+  const [activeElement, setActiveElement] = useState({});
 
   return (
     <div>
@@ -107,7 +120,7 @@ const ElemetsPage = () => {
 
           <FilterIcon height={40} width={40} />
 
-          <Button className={s.button} onClick={() => setIsOpen(true)}>
+          <Button className={s.button} onClick={() => setCreateModal(true)}>
             Create Element
             <PlusIcon />
           </Button>
@@ -218,19 +231,55 @@ const ElemetsPage = () => {
           )}
         </div>
       </section>
-      {/*  */}
-      {/* <NotificationModal
-        icon={DeleteIcon}
-        title={"Are you sure you want to delete Element?"}
-        subtitle={"You can't reverse this action"}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        action={() => setIsOpen(false)}
+
+      {/* Modals */}
+      <CreateElementModal
+        isOpen={createModal}
+        onClose={() => setCreateModal(false)}
+        onComplete={() => setSuccessModal(true)}
+      />
+
+      <ConfirmationModal
+        icon={CheckIcon}
+        title={"Element has been created successfully"}
+        isOpen={successModal}
+        onClose={() => setSuccessModal(false)}
+        action={() => setSuccessModal(false)}
         actionText={"Close to continue"}
+      />
+
+      <ConfirmationModal
+        icon={DeleteIcon}
+        title={`Are you sure you want to delete Element - ${activeElement.name}?`}
+        subtitle={"You can't reverse this action"}
+        isOpen={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        action={() => {
+          setDeleteModal(false);
+          setDeleteSuccessModal(true);
+        }}
+        actionText={"Yes, Delete"}
         actionColor="error"
         showCancel
+      />
+
+      <ConfirmationModal
+        icon={CheckRedIcon}
+        title={"Element has been deleted successfully"}
+        isOpen={deleteSuccessModal}
+        onClose={() => setDeleteSuccessModal(false)}
+        action={() => setDeleteSuccessModal(false)}
+        actionText={"Close to continue"}
+      />
+
+      {/* <ConfirmationModal
+        icon={CheckIcon}
+        title={"Element has been updated successfully"}
+        isOpen={updateSuccessModal}
+        onClose={() => setUpdateSuccessModal(false)}
+        action={() => setUpdateSuccessModal(false)}
+        actionText={"Close to continue"}
       /> */}
-      <CreateElementModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
   );
 };

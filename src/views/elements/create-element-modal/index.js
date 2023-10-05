@@ -5,7 +5,7 @@ import StepOne from "./stepone";
 import Stepper from "../../../components/stepper";
 import s from "../elements.module.scss";
 
-const CreateElementModal = ({ isOpen, onClose }) => {
+const CreateElementModal = ({ isOpen, onClose, onComplete }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -24,7 +24,18 @@ const CreateElementModal = ({ isOpen, onClose }) => {
 
   const STEPS = [
     { label: "Element Details", component: () => <StepOne handleNext={handleNext} onClose={onClose} /> },
-    { label: "Additional Details", component: () => <StepTwo handlePrev={handlePrev} onClose={onClose} /> },
+    {
+      label: "Additional Details",
+      component: () => (
+        <StepTwo
+          handlePrev={handlePrev}
+          handleSubmit={() => {
+            onClose();
+            onComplete();
+          }}
+        />
+      ),
+    },
   ];
 
   return (
