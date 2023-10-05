@@ -22,6 +22,8 @@ import Chip from "../../components/chip";
 import { TABLEDATA } from "../../assets/utils";
 import CreateElementModal from "./create-element-modal";
 import ConfirmationModal from "../../components/modal/confirmation";
+import { useNavigate } from "react-router-dom";
+import MenuDropdown from "../../components/menu";
 
 const COLUMNS = [
   { title: "Name", key: "name" },
@@ -33,11 +35,22 @@ const COLUMNS = [
   { title: "Action", key: "action" },
 ];
 
-const ElemetsPage = () => {
+const ElementsPage = () => {
+  const navigate = useNavigate();
+
   const [data] = useState(() => [...TABLEDATA]);
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [search, setSearch] = useState(globalFilter ?? "");
+
+  const menuItems = ["View Element Links", "Edit Element", "Delete Element"];
+
+  const handleAction = (action, item) => {
+    setActiveElement(item);
+    if (action.includes("View")) navigate(`/${data.indexOf(item)}`);
+    if (action.includes("Edit")) return;
+    if (action.includes("Delete")) setDeleteModal(true);
+  };
 
   const columnHelper = createColumnHelper();
 
@@ -48,14 +61,11 @@ const ElemetsPage = () => {
         col.key === "status" ? (
           <Chip color={info.getValue() === "Active" ? "secondary" : "error"}>{info.getValue()}</Chip>
         ) : col.key === "action" ? (
-          <button
-            onClick={() => {
-              setActiveElement(info.row.original);
-              setDeleteModal(true);
-            }}
-          >
-            <ActionIcon />
-          </button>
+          <MenuDropdown
+            toggler={<ActionIcon />}
+            items={menuItems}
+            onSelect={(v) => handleAction(v, info.row.original)}
+          />
         ) : (
           info.getValue()
         ),
@@ -284,4 +294,4 @@ const ElemetsPage = () => {
   );
 };
 
-export default ElemetsPage;
+export default ElementsPage;
