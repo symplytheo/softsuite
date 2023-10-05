@@ -27,7 +27,7 @@ const Stepper = ({ steps = [], activeStep = 0, showIndicators = true }) => {
       <div className={s.stepper_content}>
         {steps.map((item, index) =>
           activeStep === index ? (
-            <div className={s.step}>
+            <div key={index} className={s.step}>
               <item.component />
             </div>
           ) : null
