@@ -1,9 +1,9 @@
 import React from "react";
 import Modal from ".";
-import s from "./modal.module.scss";
 import Button from "../button";
+import s from "./modal.module.scss";
 
-const NotificationModal = ({
+const ConfirmationModal = ({
   title,
   icon,
   subtitle,
@@ -16,7 +16,7 @@ const NotificationModal = ({
 }) => {
   const Icon = icon;
   return (
-    <Modal maxWidth={434} isOpen={isOpen} onClose={onClose}>
+    <Modal maxWidth={400} isOpen={isOpen} onClose={onClose}>
       <div className={s.notification}>
         {icon && <Icon height={60} width={60} />}
         <h5>{title}</h5>
@@ -36,4 +36,4 @@ const NotificationModal = ({
   );
 };
 
-export default NotificationModal;
+export default ConfirmationModal;
