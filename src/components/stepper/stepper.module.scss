@@ -1,0 +1,100 @@
+@import "../../styles/colors";
+
+.stepper {
+
+  .stepper_indicators {
+    display: flex;
+    margin-bottom: 1.5rem;
+
+    .step {
+      text-align: center;
+      flex: 1;
+      cursor: default;
+      position: relative;
+      font-weight: 500;
+
+      .line {
+        height: 0px;
+        border-width: 2px;
+        border-style: solid;
+        position: absolute;
+        top: 60%;
+        left: calc(50% + 1.5rem);
+        width: calc(100% - 3rem);
+      }
+
+      .circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+        width: 2rem;
+        padding: 0.25rem;
+        font-size: 0.875rem;
+        border-radius: 50%;
+        margin-top: 0.5rem;
+      }
+
+      &.active {
+        .circle {
+          background: $secondary;
+          color: $white;
+        }
+        .label {
+          color: $secondary;
+        }
+        .line {
+          border-color: $grey;
+        }
+      }
+
+      &.done {
+        .circle {
+          background: $secondary;
+          color: $grey;
+        }
+        .label {
+          color: $secondary;
+        }
+        .line {
+          border-color: $secondary;
+        }
+      }
+
+      &.inactive {
+        .circle {
+          background: $white;
+          border: 1px solid $secondary;
+          color: $secondary;
+        }
+        .label {
+          color: fade-out($primary, 0.6);
+        }
+        .line {
+          border-color: $grey;
+        }
+      }
+    }
+  }
+
+  .stepper_content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    padding: 0.25rem 0.5rem;
+
+    .step {
+      animation: slide-in 0.1s ease-in-out forwards;
+    }
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
