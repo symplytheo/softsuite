@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./modal.module.scss";
 
 const Modal = ({ isOpen, onClose, children, maxWidth }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isOpen]);
+
   return (
     <div>
       <dialog open={isOpen} className={s.modal} onClick={onClose}>
