@@ -14,6 +14,10 @@
     outline: 4px solid fade-out($secondary, 0.8);
     outline-offset: 2px;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 @mixin insert-color($color) {

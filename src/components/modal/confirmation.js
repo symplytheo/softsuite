@@ -9,6 +9,8 @@ const ConfirmationModal = ({
   subtitle,
   action,
   actionText,
+  actionLoading,
+  actionLoadingText,
   showCancel,
   isOpen,
   onClose,
@@ -27,7 +29,14 @@ const ConfirmationModal = ({
               Cancel
             </Button>
           )}
-          <Button size="large" color={actionColor} fullWidth={true} onClick={action}>
+          <Button
+            size="large"
+            loading={actionLoading}
+            loadingText={actionLoadingText}
+            color={actionColor}
+            fullWidth={true}
+            onClick={action}
+          >
             {actionText}
           </Button>
         </div>

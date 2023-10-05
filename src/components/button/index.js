@@ -8,15 +8,16 @@ Button.defaultProps = {
   mode: "filled", // outlined
 };
 
-function Button({ type, size, mode, color, fullWidth, onClick, className, children }) {
+function Button({ type, size, mode, color, fullWidth, onClick, loading, loadingText, className, children }) {
   return (
     <button
       type={type}
       size={size}
+      disabled={loading}
       className={[s.base, s[mode], s[size], s[color], fullWidth && s.fullwidth, className].filter(Boolean).join(" ")}
       onClick={onClick}
     >
-      {children}
+      {loadingText || children}
     </button>
   );
 }
