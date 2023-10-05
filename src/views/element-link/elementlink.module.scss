@@ -86,92 +86,16 @@
   }
 }
 
-.table {
-  border-collapse: collapse;
-  width: 100%;
-
-  thead {
-    background-color: $primary;
-    color: $white;
-  }
-
-  th {
-    font-weight: 400;
-  }
-
-  th,
-  td {
-    font-size: 0.875rem;
-    padding: 1rem 1.125rem;
-  }
-
-  tr {
-    border-bottom: 1px solid $grey;
-  }
-
-  tbody {
-    color: $primary;
-  }
-
-  .can_sort {
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .btn_link {
-    color: $secondary;
-    text-decoration: underline;
-    font-weight: 500;
-  }
-
-  .action_btns {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+.table_btn_link {
+  color: $secondary;
+  text-decoration: underline;
+  font-weight: 500;
 }
 
-.pagination {
-  padding: 1.5rem 2rem 0;
-  display: flex;
-  justify-content: space-between;
+.table_action_btns {
+  display: inline-flex;
   align-items: center;
-
-  .pagination_info {
-    color: $primary;
-    font-weight: 500;
-
-    select {
-      background-color: $grey;
-      font-size: 0.875rem;
-      margin: 0 0.5rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.125rem;
-    }
-  }
-
-  .pagination_buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: $primary;
-    font-weight: 500;
-
-    .pagination_btn {
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      background-color: $grey;
-    }
-
-    .pagination_btn:disabled {
-      cursor: not-allowed;
-    }
-
-    .pagination_btn:not(:disabled) {
-      background-color: $primary;
-      color: $white;
-    }
-  }
+  gap: 0.5rem;
 }
 
 .modal_title {
@@ -215,8 +139,7 @@
   margin-bottom: 1.25rem;
 }
 
-.details,
-.drawer_content {
+.details {
   margin: 1rem 0 3rem;
 
   .grid {
@@ -244,33 +167,4 @@
       color: fade-out($primary, 0.4);
     }
   }
-}
-
-.drawer {
-  position: fixed;
-  top: 0;
-  right: -100%; /* Start offscreen */
-  min-width: 600px;
-  height: 100%;
-  background-color: white;
-  transition: right 0.3s ease-in-out;
-  z-index: 999;
-
-  &.open {
-    right: 0; /* Slide in */
-  }
-}
-.drawer_content {
-  padding: 2rem;
-  margin: 0;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 998;
 }
