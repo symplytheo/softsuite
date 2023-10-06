@@ -11,6 +11,8 @@
   padding: 1rem;
   border-radius: 0.25rem;
   width: 100%;
+  font-size: 1rem;
+  color: $primary;
 
   &:focus {
     outline: 2px solid fade-out($secondary, 0.8);
