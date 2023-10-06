@@ -17,7 +17,7 @@ function Button({ type, size, mode, color, fullWidth, onClick, loading, loadingT
       className={[s.base, s[mode], s[size], s[color], fullWidth && s.fullwidth, className].filter(Boolean).join(" ")}
       onClick={onClick}
     >
-      {loadingText || children}
+      {loading ? loadingText : children}
     </button>
   );
 }
