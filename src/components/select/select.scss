@@ -1,0 +1,64 @@
+@import "../../styles/colors";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &.error {
+    .customSelect__control {
+      border-color: $error;
+    }
+
+    &:focus {
+      outline-color: fade-out($error, 0.8);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.customSelect {
+  width: 100%;
+  color: $primary;
+  // Add more custom styles as needed
+}
+
+.customSelect__control {
+  // Styles for the control component
+  padding: 0.5rem 1rem;
+  border-color: $grey;
+
+  &.customSelect__control--is-focused {
+    border-color: fade-out($secondary, 0.6);
+    box-shadow: fade-out($secondary, 0.6) 0px 0px 0px 1px;
+
+    &:hover {
+      border-color: fade-out($secondary, 0.6);
+    }
+  }
+
+  .customSelect__single-value {
+    color: $primary;
+  }
+}
+
+.customSelect__option {
+  margin: 0;
+  // Styles for the option component
+}
+
+.hint,
+.errormessage {
+  font-size: 0.75rem;
+}
+
+.hint {
+  color: fade-out($primary, 0.5);
+}
+
+.errormessage {
+  color: $error;
+  background-color: fade-out($error, 0.9);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
