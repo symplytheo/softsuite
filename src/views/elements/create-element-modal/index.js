@@ -22,13 +22,46 @@ const CreateElementModal = ({ isOpen, onClose, onComplete }) => {
     }
   }, [isOpen]);
 
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    payRunId: "",
+    payRunValueId: "",
+    classificationId: "",
+    classificationValueId: "",
+    categoryId: "",
+    categoryValueId: "",
+    reportingName: "",
+    processingType: "Open",
+    status: true,
+    prorate: "No",
+    effectiveStartDate: "",
+    effectiveEndDate: "",
+    selectedMonths: [],
+    payFrequency: "Monthly",
+    modifiedBy: "Theophilus Iyonor",
+  });
+
   const STEPS = [
-    { label: "Element Details", component: () => <StepOne handleNext={handleNext} onClose={onClose} /> },
+    {
+      label: "Element Details",
+      component: () => (
+        <StepOne
+          initialValue={form}
+          handleNext={(d) => {
+            setForm({ ...form, ...d });
+            handleNext();
+          }}
+          onClose={onClose}
+        />
+      ),
+    },
     {
       label: "Additional Details",
       component: () => (
         <StepTwo
           handlePrev={handlePrev}
+          initialValue={form}
           handleSubmit={() => {
             onClose();
             onComplete();

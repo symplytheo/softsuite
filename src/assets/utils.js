@@ -168,3 +168,30 @@ export const TABLEDATA = [
     modifiedBy: "Samson Ayorinde",
   },
 ];
+
+export const formatDateTime = (d) => {
+  const date = new Date(d).toISOString().slice(0, 10).split("-").reverse().join("-");
+  const time = new Date(d).toLocaleTimeString();
+  return { date, time };
+};
+
+export const getValueByIdFromArray = (id, key, array) => {
+  if (!id || !key || !array) return "---";
+  const item = array.find((el) => String(el.id) === String(id));
+  return item ? item[key] : "--";
+};
+
+export const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
