@@ -6,7 +6,7 @@ import AddLinkStepOne from "./linkstep1";
 import AddLinkStepTwo from "./linkstep2";
 import AddLinkStepThree from "./linkstep3";
 
-const CreateElementLinkModal = ({ isOpen, onClose, onComplete }) => {
+const CreateElementLinkModal = ({ isOpen, onClose, elementId, onComplete }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -23,17 +23,70 @@ const CreateElementLinkModal = ({ isOpen, onClose, onComplete }) => {
     }
   }, [isOpen]);
 
+  const [form, setForm] = useState({
+    name: "",
+    elementId,
+    suborganizationId: { id: 1 },
+    locationId: "",
+    departmentId: "",
+    employeeCategoryId: "",
+    employeeCategoryValueId: "",
+    employeeTypeId: "",
+    employeeTypeValueId: "",
+    jobTitleId: "",
+    grade: { id: 1 },
+    gradeStep: "",
+    unionId: "",
+    amountType: "",
+    amount: "",
+    rate: "",
+    effectiveStartDate: "",
+    effectiveEndDate: "",
+    status: true,
+    automate: "Yes",
+    additionalInfo: "",
+    modifiedBy: "Theophilus Iyonor",
+  });
+
   const STEPS = [
-    { label: "Staff Information", component: () => <AddLinkStepOne handleNext={handleNext} onClose={onClose} /> },
+    {
+      label: "Staff Information",
+      component: () => (
+        <AddLinkStepOne
+          initialValue={form}
+          handleNext={(d) => {
+            setForm({ ...form, ...d });
+            handleNext();
+          }}
+          onClose={onClose}
+        />
+      ),
+    },
     {
       label: "Additional Information",
-      component: () => <AddLinkStepTwo handlePrev={handlePrev} handleNext={handleNext} />,
+      component: () => (
+        <AddLinkStepTwo
+          initialValue={form}
+          handlePrev={(d) => {
+            setForm({ ...form, ...d });
+            handlePrev();
+          }}
+          handleNext={(d) => {
+            setForm({ ...form, ...d });
+            handleNext();
+          }}
+        />
+      ),
     },
     {
       label: "Processing Information",
       component: () => (
         <AddLinkStepThree
-          handlePrev={handlePrev}
+          initialValue={form}
+          handlePrev={(d) => {
+            setForm({ ...form, ...d });
+            handlePrev();
+          }}
           handleSubmit={() => {
             onClose();
             onComplete();

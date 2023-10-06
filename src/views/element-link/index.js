@@ -19,29 +19,75 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { TABLEDATA } from "../../assets/utils";
+import { getValueByIdFromArray } from "../../assets/utils";
 import CreateElementLinkModal from "./create-link-modal";
 import ConfirmationModal from "../../components/modal/confirmation";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DataTable from "../_parts/datatable";
 import NavigationDrawer from "../_parts/navigation_drawer";
+import { useDeleteElementLinkMutation, useGetAllElementLinksQuery, useGetElementByIdQuery } from "../../lib/api";
+import { useSelector } from "react-redux";
 
 const COLUMNS = [
   { title: "Name", key: "name" },
-  { title: "Sub-Organization", key: "category" },
-  { title: "Department", key: "classification" },
-  { title: "Employee Category", key: "status" },
-  { title: "Amount", key: "updatedAt" },
+  { title: "Sub-Organization", key: "suborganizationId" },
+  { title: "Department", key: "departmentId" },
+  { title: "Employee Category", key: "employeeCategoryValueId" },
+  { title: "Amount", key: "amount" },
   { title: "Details", key: "details" },
   { title: "Action", key: "action" },
 ];
 
 const ElementLinksPage = () => {
   const navigate = useNavigate();
-  const [data] = useState(() => [...TABLEDATA]);
+
+  const { elementId } = useParams();
+
+  const [data, setData] = useState(() => []);
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [search, setSearch] = useState(globalFilter ?? "");
+  const [element, setElement] = useState();
+
+  const { data: currentElement } = useGetElementByIdQuery(elementId);
+  const {
+    data: elementLinks,
+    isLoading: isGettingLinks,
+    refetch: refetchElementLinks,
+  } = useGetAllElementLinksQuery(elementId);
+  const { elementCategories, elementClassifications, elementPayruns, suborganizations, employeeCategories } =
+    useSelector((state) => state.root);
+
+  useEffect(() => {
+    if (currentElement) {
+      setElement(currentElement.data || {});
+    }
+  }, [currentElement]);
+
+  useEffect(() => {
+    if (elementLinks) {
+      const allElementLinks = elementLinks.data?.content || [];
+      setData([...allElementLinks].reverse());
+    }
+  }, [elementLinks]);
+
+  const DETAILS = {
+    "Element Name": element?.name,
+    "Element Classification":
+      getValueByIdFromArray(element?.classificationValueId, "name", elementClassifications) || "---",
+    "Element Category": getValueByIdFromArray(element?.categoryValueId, "name", elementCategories) || "---",
+    Payrun: getValueByIdFromArray(element?.payRunValueId, "name", elementPayruns) || "---",
+    Description: element?.description,
+    "Reporting Name": element?.reportingName,
+    "Effective Start Date": element?.effectiveStartDate || "---",
+    "Effective End Date": element?.effectiveStartDate || "---",
+    "Processing Type": element?.processingType,
+    "Pay Frequency": element?.payFrequency,
+    "Pay Months": element?.selectedMonths.length ? element?.selectedMonths.join(", ") : "----",
+    Prorate: element?.prorate,
+    Status: String(element?.status).toLowerCase() === "active" ? "Active" : "Inactive",
+    "Modified By": element?.modifiedBy,
+  };
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -55,11 +101,17 @@ const ElementLinksPage = () => {
     columnHelper.accessor(col.key, {
       header: () => col.title,
       cell: (info) =>
-        col.key === "details" ? (
+        col.key === "suborganizationId" ? (
+          getValueByIdFromArray(info.getValue(), "name", suborganizations) || "---"
+        ) : col.key === "employeeCategoryValueId" ? (
+          getValueByIdFromArray(info.getValue(), "name", employeeCategories) || "---"
+        ) : col.key === "amount" ? (
+          "NGN " + Number(info.getValue()).toLocaleString()
+        ) : col.key === "details" ? (
           <button
             className={s.table_btn_link}
             onClick={() => {
-              setActiveElement(info.row.original);
+              setActiveElementLink(info.row.original);
               toggleDrawer();
             }}
           >
@@ -69,15 +121,16 @@ const ElementLinksPage = () => {
           <div className={s.table_action_btns}>
             <button
               onClick={() => {
-                setActiveElement(info.row.original);
+                setActiveElementLink(info.row.original);
                 // setDeleteModal(true);
+                alert("Edit Element Link");
               }}
             >
               <EditIcon />
             </button>
             <button
               onClick={() => {
-                setActiveElement(info.row.original);
+                setActiveElementLink(info.row.original);
                 setDeleteModal(true);
               }}
             >
@@ -118,7 +171,17 @@ const ElementLinksPage = () => {
   const [deleteSuccessModal, setDeleteSuccessModal] = useState(false);
   // const [updateSuccessModal, setUpdateSuccessModal] = useState(false);
 
-  const [activeElement, setActiveElement] = useState({});
+  const [activeElementLink, setActiveElementLink] = useState({});
+
+  const [deleteElementLink, { isLoading: isDeleting }] = useDeleteElementLinkMutation();
+
+  const handleDelete = () => {
+    deleteElementLink({ id: elementId, linkId: activeElementLink.id }).then(() => {
+      setDeleteModal(false);
+      setDeleteSuccessModal(true);
+      refetchElementLinks();
+    });
+  };
 
   return (
     <div>
@@ -141,10 +204,10 @@ const ElementLinksPage = () => {
           <h2 className={s.card_title}>Element Details</h2>
           <div className={s.details}>
             <div className={s.grid}>
-              {[...Array(14)].map((_, x) => (
-                <div key={x} className={s.grid_child}>
-                  <h5 className={s.label}>title</h5>
-                  <p>Hello World</p>
+              {Object.entries(DETAILS).map(([key, val]) => (
+                <div key={key} className={s.grid_child}>
+                  <h5 className={s.label}>{key}</h5>
+                  <p>{val}</p>
                 </div>
               ))}
             </div>
@@ -174,7 +237,11 @@ const ElementLinksPage = () => {
           </div>
 
           <div className={s.card_content}>
-            {data.length ? (
+            {isGettingLinks ? (
+              <div className={s.no_content}>
+                <h4>Loading...</h4>
+              </div>
+            ) : data.length ? (
               <DataTable table={table} flexRender={flexRender} />
             ) : (
               <div className={s.no_content}>
@@ -188,9 +255,13 @@ const ElementLinksPage = () => {
 
       {/* Modals */}
       <CreateElementLinkModal
+        elementId={elementId}
         isOpen={createModal}
         onClose={() => setCreateModal(false)}
-        onComplete={() => setSuccessModal(true)}
+        onComplete={() => {
+          setSuccessModal(true);
+          refetchElementLinks();
+        }}
       />
 
       <ConfirmationModal
@@ -204,16 +275,15 @@ const ElementLinksPage = () => {
 
       <ConfirmationModal
         icon={DeleteIcon}
-        title={`Are you sure you want to delete Element Link - ${activeElement.name}?`}
+        title={`Are you sure you want to delete Element Link - ${activeElementLink.name}?`}
         subtitle={"You can't reverse this action"}
         isOpen={deleteModal}
         onClose={() => setDeleteModal(false)}
-        action={() => {
-          setDeleteModal(false);
-          setDeleteSuccessModal(true);
-        }}
+        action={handleDelete}
         actionText={"Yes, Delete"}
         actionColor="error"
+        actionLoading={isDeleting}
+        actionLoadingText={"Deleting..."}
         showCancel
       />
 
@@ -235,7 +305,7 @@ const ElementLinksPage = () => {
         actionText={"Close to continue"}
       /> */}
 
-      <NavigationDrawer isOpen={isOpen} onClose={toggleDrawer} />
+      <NavigationDrawer isOpen={isOpen} onClose={toggleDrawer} item={activeElementLink} />
     </div>
   );
 };
